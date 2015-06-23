@@ -1,6 +1,7 @@
 package com.example.andigitalfoursquare;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.example.andigitalfoursquare.adapter.CustomPlaceList;
 import com.example.andigitalfoursquare.common.APICallbackInterface;
 import com.example.andigitalfoursquare.common.APICallsManager;
 import com.example.andigitalfoursquare.common.Const;
@@ -17,17 +19,17 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class MainActivity extends Activity {
+	
+	
 	
 	static Context context;
 
@@ -35,13 +37,16 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		context =this;
 		
-		context = this;
+		
 		
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+		
+		
 	}
 
 	@Override
@@ -67,6 +72,10 @@ public class MainActivity extends Activity {
 	 * A placeholder fragment containing a simple view.
 	 */
 	public static class PlaceholderFragment extends Fragment {
+		
+		public ListView listView;
+		public CustomPlaceList adapter;
+		public ArrayList<Place> dataItems;
 
 		public PlaceholderFragment() {
 		}
@@ -77,96 +86,109 @@ public class MainActivity extends Activity {
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
 			
-			fourquareFetchLocation("");
+			dataItems = new ArrayList<Place>();
+			fourquareFetchLocation("sushi");
+			listView = (ListView) rootView.findViewById(R.id.listview);
+			adapter = new CustomPlaceList(getActivity().getApplicationContext(), this,dataItems);
+			listView.setAdapter(adapter);
 			
 			return rootView;
 		}
-	}
-	
-	
-	protected static void fourquareFetchLocation(String searchQuery) {
-    	
 		
-		APICallbackInterface apiCallback = new APICallbackInterface() {
+		
+		public void fourquareFetchLocation(String searchQuery) {
+	    	
+			
+			APICallbackInterface apiCallback = new APICallbackInterface() {
 
-			@Override
-			public void onRespondRecived(String result) {
-				// TODO Auto-generated method stub
-				
-				JSONObject jsonObj;
-				try {
-					jsonObj = new JSONObject(result);
+				@Override
+				public void onRespondRecived(String result) {
+					// TODO Auto-generated method stub
 					
+					JSONObject jsonObj;
+					try {
+						jsonObj = new JSONObject(result);
+						
+						
+							try {
+								JSONArray venuesArray = jsonObj.getJSONArray("venues");
+								
 					
-						try {
-							JSONArray venuesArray = jsonObj.getJSONArray("venues");
-							
-				
 
-							for (int i = 0; i < venuesArray.length(); i++) {
+								for (int i = 0; i < venuesArray.length(); i++) {
+									
+									JSONArray categoriesArray = venuesArray.getJSONObject(i).getJSONArray("categories");
+									
+									Place item = new Place();
+									item.setName(categoriesArray.getJSONObject(0).getString("name"));
+									
+									dataItems.add(item);
+									
+								}
 								
-								JSONArray categoriesArray = venuesArray.getJSONObject(i).getJSONArray("categories");
 								
-								Place item = new Place();
-								item.setName(categoriesArray.getJSONObject(0).getString("name"));
+
 								
-				
+							} catch (JSONException e) {
+								e.printStackTrace();
 							}
-
 							
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
+							
+						
+							adapter.CustomPlaceListUpdate(dataItems);
+							adapter.notifyDataSetChanged();
 						
 						
+						
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					
 					
+				}
+
+				@Override
+				public void startAPIGetTask() {
+					// TODO Auto-generated method stub
 					
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				}
+
+				@Override
+				public void startAPIPostTask() {
+					// TODO Auto-generated method stub
+					
+
 				}
 				
-				
-			}
-
-			@Override
-			public void startAPIGetTask() {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void startAPIPostTask() {
-				// TODO Auto-generated method stub
-				
-
-			}
-			
-		};
-	
-        
-        Map<String,String> paramsHeader = new HashMap<String, String>();
-        paramsHeader.put("Content-Type","application/x-www-form-urlencoded");
-        
-        
-        String urlString = "https://api.foursquare.com/v2/venues/search?client_id="
-				+ Const.CLIENT_ID
-				+ "&client_secret="
-				+ Const.CLIENT_SECRET
-				+ "&v=20130815"
-				+ "&near=london"
-				+ "&query="
-				+ Uri.encode(searchQuery);
-       
-        new APICallsManager(context, "GET",apiCallback, urlString, paramsHeader);
-        
-	}
-	
-	public void onItemClick(int pos) {
+			};
 		
-	}
+	        
+	        Map<String,String> paramsHeader = new HashMap<String, String>();
+	        paramsHeader.put("Content-Type","application/x-www-form-urlencoded");
+	        
+	        
+	        String urlString = "https://api.foursquare.com/v2/venues/search?client_id="
+					+ Const.CLIENT_ID
+					+ "&client_secret="
+					+ Const.CLIENT_SECRET
+					+ "&v=20130815"
+					+ "&near=london"
+					+ "&query="
+					+ Uri.encode(searchQuery);
+	       
+	        new APICallsManager(context, "GET",apiCallback, urlString, paramsHeader);
+	        
+		}
+		
+		public void onItemClick(int pos) {
+			
+		}
 
+	}
+	
+	
+	
 
 
 }

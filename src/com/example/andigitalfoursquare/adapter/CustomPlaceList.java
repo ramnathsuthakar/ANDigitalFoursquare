@@ -4,9 +4,13 @@ package com.example.andigitalfoursquare.adapter;
 import java.util.ArrayList;
 
 import com.example.andigitalfoursquare.MainActivity;
+import com.example.andigitalfoursquare.MainActivity.PlaceholderFragment;
 import com.example.andigitalfoursquare.R;
 import com.example.andigitalfoursquare.model.Place;
+
 import android.app.Activity;
+import android.app.Fragment;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +19,13 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class CustomPlaceList extends BaseAdapter implements OnClickListener{
-	private Activity activity;
+	private Context context;
+	private Fragment fragment;
 	private ArrayList<Place> dataItems;
 
-	public CustomPlaceList(Activity activity, ArrayList<Place> dataItems) {
-		this.activity = activity;
+	public CustomPlaceList(Context context, Fragment fragment, ArrayList<Place> dataItems) {
+		this.context = context;
+		this.fragment = fragment;
 		this.dataItems = dataItems;
 	}
 	
@@ -47,7 +53,7 @@ public class CustomPlaceList extends BaseAdapter implements OnClickListener{
 
 		if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
-            		activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            		context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = mInflater.inflate(R.layout.place_row, null);
         }
 		
@@ -85,7 +91,7 @@ public class CustomPlaceList extends BaseAdapter implements OnClickListener{
         public void onClick(View arg0) {
 
    
-        	MainActivity sct = (MainActivity)activity;
+        	PlaceholderFragment sct = (PlaceholderFragment)fragment;
         	
         		sct.onItemClick(mPosition);
             
