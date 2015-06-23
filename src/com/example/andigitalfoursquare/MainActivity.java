@@ -20,6 +20,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -105,6 +106,8 @@ public class MainActivity extends Activity {
 				public void onRespondRecived(String result) {
 					// TODO Auto-generated method stub
 					
+					Log.d("RESULT", "Result: = " + result);
+					
 					JSONObject jsonObj;
 					try {
 						jsonObj = new JSONObject(result);
@@ -177,7 +180,7 @@ public class MainActivity extends Activity {
 					+ "&query="
 					+ Uri.encode(searchQuery);
 	       
-	        new APICallsManager(context, "GET",apiCallback, urlString, paramsHeader);
+	        new APICallsManager(getActivity().getApplicationContext(), "GET",apiCallback, urlString, paramsHeader);
 	        
 		}
 		
