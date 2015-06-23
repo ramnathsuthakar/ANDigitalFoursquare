@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import com.example.andigitalfoursquare.adapter.CustomPlaceList;
 import com.example.andigitalfoursquare.common.APICallbackInterface;
 import com.example.andigitalfoursquare.common.APICallsManager;
+import com.example.andigitalfoursquare.common.AsyncTaskManager;
 import com.example.andigitalfoursquare.common.Const;
 import com.example.andigitalfoursquare.model.Place;
 
@@ -194,6 +195,8 @@ public class MainActivity extends Activity {
 					
 				}
 
+		
+
 				@Override
 				public void startAPIGetTask() {
 					// TODO Auto-generated method stub
@@ -204,8 +207,9 @@ public class MainActivity extends Activity {
 				public void startAPIPostTask() {
 					// TODO Auto-generated method stub
 					
-
 				}
+
+				
 				
 			};
 		
@@ -223,7 +227,10 @@ public class MainActivity extends Activity {
 					+ "&query="
 					+ Uri.encode(searchQuery);
 	       
-	        new APICallsManager(context, "GET",apiCallback, urlString, paramsHeader);
+	        //new APICallsManager(context, "GET",apiCallback, urlString, paramsHeader);
+	        AsyncTaskManager.executeConcurrently(new APICallsManager(getActivity().getApplicationContext(), "GET",apiCallback, urlString, paramsHeader));
+	        
+	        
 	        
 		}
 		

@@ -67,7 +67,7 @@ public class APICallsManager extends AsyncTask<String,Void,String> {
 	@Override
     protected void onPostExecute(String results) {
 		
-        mAPICallback.onRespondRecived(results);
+        //mAPICallback.onRespondRecived(results);
 
     }
 	
