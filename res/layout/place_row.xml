@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:gravity="center_vertical"
+	    android:paddingLeft="10dp"
+	    android:paddingRight="10dp"
+	    android:layout_marginBottom="5dp"
+	    android:orientation="horizontal" >
+	    
+        <TextView
+	        android:id="@+id/no_label"
+	        android:layout_width="match_parent"
+	        android:layout_height="50dp"
+	        android:layout_weight="0.75"
+	        android:gravity="center_horizontal|center_vertical"
+	        android:text="100"
+	        android:background="#a5dd1e"
+	        android:textColor="#05613b"
+	        android:textSize="18sp" />
+        
+	    <TextView
+	        android:id="@+id/name_label"
+	        android:layout_width="match_parent"
+	        android:layout_height="50dp"
+	        android:layout_weight="0.35"
+	        android:gravity="left|center_vertical"
+	        android:text="Ramnath Suthakar"
+	        android:textColor="#ffffff"
+	        android:textSize="18sp" />
+	        
+    </LinearLayout>
+
+</LinearLayout>
