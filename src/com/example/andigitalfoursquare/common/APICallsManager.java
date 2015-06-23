@@ -55,7 +55,7 @@ public class APICallsManager extends AsyncTask<String,Void,String> {
 	@Override
 	protected String doInBackground(String... params) {
 		// TODO Auto-generated method stub
-		if(method.equalsIgnoreCase("Get")) {
+		if(method.equalsIgnoreCase("GET")) {
 			APIGet();
 		} else {
 			APIPost();
@@ -67,7 +67,7 @@ public class APICallsManager extends AsyncTask<String,Void,String> {
 	@Override
     protected void onPostExecute(String results) {
 		
-        //mAPICallback.onRespondRecived(results);
+        mAPICallback.onRespondRecived(results);
 
     }
 	

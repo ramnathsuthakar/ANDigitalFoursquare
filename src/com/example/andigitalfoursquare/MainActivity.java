@@ -21,12 +21,19 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 	
@@ -77,6 +84,8 @@ public class MainActivity extends Activity {
 		public ListView listView;
 		public CustomPlaceList adapter;
 		public ArrayList<Place> dataItems;
+		AutoCompleteTextView searchbox;
+		Button search_button;
 
 		public PlaceholderFragment() {
 		}
@@ -93,13 +102,50 @@ public class MainActivity extends Activity {
 			adapter = new CustomPlaceList(getActivity().getApplicationContext(), this,dataItems);
 			listView.setAdapter(adapter);
 			
+			
+			searchbox = (AutoCompleteTextView) rootView.findViewById(R.id.search_auto);
+			
+			searchbox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+				@Override
+				public boolean onEditorAction(TextView v, int actionId,
+						KeyEvent event) {
+					
+					if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+						
+						fourquareFetchLocation(searchbox.getText().toString());
+						
+			            return true;
+			        }
+					
+				
+					
+					return false;
+					
+					
+				}
+			});
+			
+			search_button = (Button) rootView.findViewById(R.id.search_button);
+			search_button.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					fourquareFetchLocation(searchbox.getText().toString());
+				}
+				
+			});
+
+			
 			return rootView;
 		}
+		
+
 		
 		
 		public void fourquareFetchLocation(String searchQuery) {
 	    	
-			
+			Log.d("Search", "Search String: = " + searchQuery);
 			APICallbackInterface apiCallback = new APICallbackInterface() {
 
 				@Override
@@ -115,9 +161,6 @@ public class MainActivity extends Activity {
 						
 							try {
 								JSONArray venuesArray = jsonObj.getJSONArray("venues");
-								
-					
-
 								for (int i = 0; i < venuesArray.length(); i++) {
 									
 									JSONArray categoriesArray = venuesArray.getJSONObject(i).getJSONArray("categories");
@@ -180,7 +223,7 @@ public class MainActivity extends Activity {
 					+ "&query="
 					+ Uri.encode(searchQuery);
 	       
-	        new APICallsManager(getActivity().getApplicationContext(), "GET",apiCallback, urlString, paramsHeader);
+	        new APICallsManager(context, "GET",apiCallback, urlString, paramsHeader);
 	        
 		}
 		
