@@ -2,10 +2,11 @@ package com.example.andigitalfoursquare.adapter;
 
 
 import java.util.ArrayList;
-
-import com.example.andigitalfoursquare.MainActivity;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.example.andigitalfoursquare.MainActivity.PlaceholderFragment;
 import com.example.andigitalfoursquare.R;
+import com.example.andigitalfoursquare.common.AppController;
 import com.example.andigitalfoursquare.model.Place;
 
 import android.app.Activity;
@@ -22,11 +23,16 @@ public class CustomPlaceList extends BaseAdapter implements OnClickListener{
 	private Context context;
 	private Fragment fragment;
 	private ArrayList<Place> dataItems;
-
+	ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+	private LayoutInflater mInflater;
+	
+	
 	public CustomPlaceList(Context context, Fragment fragment, ArrayList<Place> dataItems) {
 		this.context = context;
 		this.fragment = fragment;
 		this.dataItems = dataItems;
+		mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+		
 	}
 	
 	public void CustomPlaceListUpdate(ArrayList<Place> dataItems) {
@@ -50,24 +56,42 @@ public class CustomPlaceList extends BaseAdapter implements OnClickListener{
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-
+		
+		if (imageLoader == null)
+			imageLoader = AppController.getInstance().getImageLoader();
+		
+		ViewHolder vHolder = null;
+		
 		if (convertView == null) {
-            LayoutInflater mInflater = (LayoutInflater)
-            		context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflater.inflate(R.layout.place_row, null);
-        }
+			vHolder = new ViewHolder();
+			convertView = mInflater.inflate(R.layout.place_row, null);
+			
+			vHolder.icon_picture = (NetworkImageView) convertView.findViewById(R.id.i_picture);
+			vHolder.rankLabel = (TextView) convertView.findViewById(R.id.no_label); 
+			vHolder.NameLabel = (TextView) convertView.findViewById(R.id.name_label); 
+			
+			convertView.setTag(vHolder);
+        } else {
+        	vHolder = (ViewHolder) convertView.getTag();
+		}
+		
+		
 		
 		Place mPlace= dataItems.get(position);
 		
-		
-		TextView rankLabel = (TextView) convertView.findViewById(R.id.no_label);
-		TextView NameLabel = (TextView) convertView.findViewById(R.id.name_label);
-		rankLabel.setText(Integer.toString(position+1));
-		NameLabel.setText(mPlace.getName());
+		vHolder.icon_picture.setImageUrl(mPlace.getIconURL(), imageLoader);
+		vHolder.rankLabel.setText(Integer.toString(position+1));
+		vHolder.NameLabel.setText(mPlace.getName());
 		
 		convertView.setOnClickListener(new OnItemClickListener( position ));
 
 		return convertView;
+	}
+	
+	public static class ViewHolder {
+		TextView rankLabel;
+		TextView NameLabel;
+		public NetworkImageView icon_picture;
 	}
 	
 	@Override

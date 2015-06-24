@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="list_item_title">#fff</color>
+    <color name="image_background">#4da3e7</color>
+    <color name="list_background">#0ac8df</color>
+    <color name="list_background_pressed">#368a6f</color>
+    <color name="list_divider">#009163</color>
+    <color name="counter_text_bg">#626262</color>
+    <color name="counter_text_color">#c5c4c4</color>
+    <color name="white_color">#ffffff</color>
+    <color name="mid_gray_color">#b2b2b2</color>
+    <color name="normal_gray_color">#4b4b4b</color>
+    <color name="black_color">#000000</color>
+    <color name="textcolour_hint">#D0D0D0</color>
+    <color name="normal_font_colour">#9b9b9b</color>
+    <color name="white">#ffffff</color>
+    
+    
+    
+    
+    
+    
+    
+</resources>

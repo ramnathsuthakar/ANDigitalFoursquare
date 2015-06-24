@@ -145,6 +145,10 @@ public class MainActivity extends Activity {
 		
 		
 		public void fourquareFetchLocation(String searchQuery) {
+			
+			// Clear
+			if(dataItems != null)
+				dataItems.clear();
 	    	
 			Log.d("Search", "Search String: = " + searchQuery);
 			APICallbackInterface apiCallback = new APICallbackInterface() {
@@ -161,14 +165,24 @@ public class MainActivity extends Activity {
 						
 						
 							try {
-								JSONArray venuesArray = jsonObj.getJSONArray("venues");
+								JSONObject responseObject = jsonObj.getJSONObject("response");
+								
+								JSONArray venuesArray = responseObject.getJSONArray("venues");
+								
+								
 								for (int i = 0; i < venuesArray.length(); i++) {
 									
 									JSONArray categoriesArray = venuesArray.getJSONObject(i).getJSONArray("categories");
 									
+									JSONObject iconObject = categoriesArray.getJSONObject(0).getJSONObject("icon");
+									
 									Place item = new Place();
 									item.setName(categoriesArray.getJSONObject(0).getString("name"));
 									
+									String iURL = iconObject.getString("prefix")+"88"+iconObject.getString("suffix");
+									
+									Log.d("ICON", "Icon IMage: - " + iURL);
+									item.setIconURL(iURL);
 									dataItems.add(item);
 									
 								}
