@@ -91,6 +91,7 @@ public class MainActivity extends Activity {
 		public CustomPlaceList adapter;
 		public ArrayList<Place> dataItems;
 		AutoCompleteTextView searchbox;
+		AutoCompleteTextView search_location;
 		Button search_button;
 
 		public PlaceholderFragment() {
@@ -103,22 +104,20 @@ public class MainActivity extends Activity {
 					false);
 			
 			dataItems = new ArrayList<Place>();
-			fourquareFetchLocation("sushi");
+			fourquareFetchLocation("sushi", "London"); // Default
 			listView = (ListView) rootView.findViewById(R.id.listview);
 			adapter = new CustomPlaceList(getActivity().getApplicationContext(), this,dataItems);
 			listView.setAdapter(adapter);
 			
-			
-			searchbox = (AutoCompleteTextView) rootView.findViewById(R.id.search_auto);
-			
-			searchbox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			search_location = (AutoCompleteTextView) rootView.findViewById(R.id.search_location);
+			search_location.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 				@Override
 				public boolean onEditorAction(TextView v, int actionId,
 						KeyEvent event) {
 					
 					if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 						
-						fourquareFetchLocation(searchbox.getText().toString());
+						fourquareFetchLocation(searchbox.getText().toString(), search_location.getText().toString());
 						hideKeybord(v);
 						
 			            return true;
@@ -132,13 +131,39 @@ public class MainActivity extends Activity {
 				}
 			});
 			
+			
+			searchbox = (AutoCompleteTextView) rootView.findViewById(R.id.search_auto);
+			searchbox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+				@Override
+				public boolean onEditorAction(TextView v, int actionId,
+						KeyEvent event) {
+					
+					if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+						
+						fourquareFetchLocation(searchbox.getText().toString(), search_location.getText().toString());
+						hideKeybord(v);
+						
+			            return true;
+			        }
+					
+				
+					
+					return false;
+					
+					
+				}
+			});
+			
+			
+			
+			
 			search_button = (Button) rootView.findViewById(R.id.search_button);
 			search_button.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					fourquareFetchLocation(searchbox.getText().toString());
+					fourquareFetchLocation(searchbox.getText().toString(), search_location.getText().toString());
 					hideKeybord(v);
 				}
 				
@@ -151,7 +176,7 @@ public class MainActivity extends Activity {
 
 		
 		
-		public void fourquareFetchLocation(String searchQuery) {
+		public void fourquareFetchLocation(String searchQuery, String location) {
 			
 			// Clear
 			if(dataItems != null)
@@ -243,7 +268,8 @@ public class MainActivity extends Activity {
 					+ "&client_secret="
 					+ Const.CLIENT_SECRET
 					+ "&v=20130815"
-					+ "&near=london"
+					+ "&near="
+					+ Uri.encode(location)
 					+ "&query="
 					+ Uri.encode(searchQuery);
 	       
