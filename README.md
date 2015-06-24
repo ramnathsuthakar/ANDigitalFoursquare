@@ -1,4 +1,4 @@
-# ANDigitalFoursquare
+# ANDigital Foursquare Android Project
 
 ## ANDigital Test submitted By Ramnath
 ### Completed
