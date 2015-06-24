@@ -4,11 +4,13 @@ import com.example.andigitalfoursquare.util.InternetConnectivityUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.Typeface;
-import android.util.Log;
+/**
+ * |
+ *
+ * @author Ramnath Suthakar
+ *         Date: 23/06/2015
+ */
 
 public class ANDigitalAppConfig {
 	private static ANDigitalAppConfig uniqInstance;

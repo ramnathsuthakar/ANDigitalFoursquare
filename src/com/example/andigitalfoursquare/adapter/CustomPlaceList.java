@@ -8,7 +8,6 @@ import com.example.andigitalfoursquare.MainActivity.PlaceholderFragment;
 import com.example.andigitalfoursquare.R;
 import com.example.andigitalfoursquare.common.AppController;
 import com.example.andigitalfoursquare.model.Place;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -18,6 +17,13 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+/**
+ * |
+ *
+ * @author Ramnath Suthakar
+ *         Date: 23/06/2015
+ */
 
 public class CustomPlaceList extends BaseAdapter implements OnClickListener{
 	private Context context;

@@ -36,6 +36,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * |
+ *
+ * @author Ramnath Suthakar
+ *         Date: 23/06/2015
+ */
+
 public class MainActivity extends Activity {
 	
 	
@@ -47,8 +54,6 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		context =this;
-		
-		
 		
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction()
@@ -114,6 +119,7 @@ public class MainActivity extends Activity {
 					if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 						
 						fourquareFetchLocation(searchbox.getText().toString());
+						hideKeybord(v);
 						
 			            return true;
 			        }
@@ -133,6 +139,7 @@ public class MainActivity extends Activity {
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					fourquareFetchLocation(searchbox.getText().toString());
+					hideKeybord(v);
 				}
 				
 			});
@@ -161,25 +168,24 @@ public class MainActivity extends Activity {
 					
 					JSONObject jsonObj;
 					try {
-						jsonObj = new JSONObject(result);
+						jsonObj = new JSONObject(result); // Get Convert string to JSONObject
 						
 						
 							try {
-								JSONObject responseObject = jsonObj.getJSONObject("response");
+								JSONObject responseObject = jsonObj.getJSONObject(Const.RESPONSE_KEY); // Get Response
 								
-								JSONArray venuesArray = responseObject.getJSONArray("venues");
+								JSONArray venuesArray = responseObject.getJSONArray(Const.VENUE_KEY); // Get Venue
 								
 								
 								for (int i = 0; i < venuesArray.length(); i++) {
 									
-									JSONArray categoriesArray = venuesArray.getJSONObject(i).getJSONArray("categories");
-									
-									JSONObject iconObject = categoriesArray.getJSONObject(0).getJSONObject("icon");
+									JSONArray categoriesArray = venuesArray.getJSONObject(i).getJSONArray(Const.CATEGORY_KEY); // Get Category
+									JSONObject iconObject = categoriesArray.getJSONObject(0).getJSONObject(Const.ICON_KEY); // Get Icon
 									
 									Place item = new Place();
-									item.setName(categoriesArray.getJSONObject(0).getString("name"));
+									item.setName(categoriesArray.getJSONObject(0).getString(Const.NAME_KEY));
 									
-									String iURL = iconObject.getString("prefix")+"88"+iconObject.getString("suffix");
+									String iURL = iconObject.getString(Const.PREFIX_KEY)+"88"+iconObject.getString(Const.SUFFIX_KEY);
 									
 									Log.d("ICON", "Icon IMage: - " + iURL);
 									item.setIconURL(iURL);
@@ -251,8 +257,17 @@ public class MainActivity extends Activity {
 		public void onItemClick(int pos) {
 			
 		}
+		
+		public void hideKeybord(View view) {
+			
+			final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+		}
 
 	}
+	
+	
+	
 	
 	
 	
